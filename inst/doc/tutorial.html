@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Matija Obreza &amp; Nora Castaneda" />
+
+<meta name="date" content="2024-08-08" />
+
+<title>genesysr Tutorial</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">genesysr Tutorial</h1>
+<h4 class="author">Matija Obreza &amp; Nora Castaneda</h4>
+<h4 class="date">2024-08-08</h4>
+
+
+
+<div id="querying-genesys-pgr" class="section level1">
+<h1>Querying Genesys PGR</h1>
+<p><a href="https://www.genesys-pgr.org">Genesys PGR</a> is the global
+database on plant genetic resources maintained <em>ex situ</em> in
+national, regional and international genebanks around the world.</p>
+<p><strong>genesysr</strong> uses the <a href="https://www.genesys-pgr.org/documentation/apis">Genesys API</a> to
+query Genesys data. The API is accessible at <a href="https://api.genesys-pgr.org" class="uri">https://api.genesys-pgr.org</a>.</p>
+<p>Accessing data with <strong>genesysr</strong> is similar to
+downloading data in CSV or Excel format and loading it into R.</p>
+<div id="for-the-impatient" class="section level2">
+<h2>For the impatient</h2>
+<p>Accession passport data is retrieved with the
+<code>get_accessions</code> function.</p>
+<p>Accessing Genesys requires authentication so the first thing to do is
+to login:</p>
+<pre><code>## Setup: use Genesys Sandbox environment
+# genesysr::setup_sandbox() # Use this to connect to our test environment https://sandbox.genesys-pgr.org
+# genesysr::setup_production() # This is initialized by default when loading genesysr
+
+# Open a browser: login to Genesys and authorize access
+genesysr::user_login()</code></pre>
+<p>The database is queried by providing a <code>filter</code> (see
+Filters below) and the list of passport data fields that you wish to
+download from Genesys. A basic list of MCPD descriptors (“INSTCODE”,
+“ACCENUMB”, “DOI”, “HISTORIC”, “GENUS”, “SPECIES”, “SUBTAXA”,
+“SAMPSTAT”) is used if you don’t specify your own list.</p>
+<pre><code># Retrieve accessions for genus *Musa*
+musa &lt;- get_accessions(filters = list(taxonomy = list(genus = list(&#39;Musa&#39;))))
+
+# Retrieve all accession data for the Musa International Transit Center, Bioversity International
+itc &lt;- get_accessions(list(institute = list(code = list(&#39;BEL084&#39;))))
+
+# Retrieve all accession data for the Musa International Transit Center, Bioversity International (BEL084) and the International Center for Tropical Agriculture (COL003)
+some &lt;- get_accessions(list(institute = list(code = list(&#39;BEL084&#39;,&#39;COL003&#39;))))</code></pre>
+<p><strong>genesysr</strong> provides utility functions to create
+<code>filter</code> objects using <a href="https://www.genesys-pgr.org/documentation/basics">Multi-Crop
+Passport Descriptors (MCPD)</a> definitions:</p>
+<pre><code># Retrieve data by country of origin (MCPD)
+get_accessions(mcpd_filter(ORIGCTY = list(&quot;DEU&quot;, &quot;SVN&quot;)))</code></pre>
+</div>
+</div>
+<div id="processing-fetched-data" class="section level1">
+<h1>Processing fetched data</h1>
+<p>Passport data follows MCPD standard and where multiple values are
+possible, they will be separated by a semicolon <code>;</code>.</p>
+<p>Example: Column “STORAGE” may include <code>11;12</code> or a single
+<code>11</code>.</p>
+</div>
+<div id="filters" class="section level1">
+<h1>Filters</h1>
+<p>The <code>filter</code> object is a named <code>list()</code> where
+names match a Genesys filter and the value specifies the criteria to
+match.</p>
+<p>The records returned by Genesys match all filters provided
+(<em>AND</em> operation), while individual filters allow for specifying
+multiple criteria (<em>OR</em> operation):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># (GENUS == Musa) AND ((ORIGCTY == NGA) OR (ORIGCTY == CIV))</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">taxonomy =</span> <span class="fu">list</span>(<span class="at">genus =</span> <span class="fu">c</span>(<span class="st">&#39;Musa&#39;</span>), <span class="at">species =</span> <span class="fu">c</span>(<span class="st">&#39;aa&#39;</span>)), <span class="at">countryOfOrigin =</span> <span class="fu">list</span>(<span class="at">iso3 =</span> <span class="fu">c</span>(<span class="st">&#39;NGA&#39;</span>, <span class="st">&#39;CIV&#39;</span>)))</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># OR</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>filter <span class="ot">&lt;-</span> <span class="fu">list</span>();</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>filter<span class="sc">$</span>taxonomy<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;Musa&#39;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>filter<span class="sc">$</span>taxonomy<span class="sc">$</span>species <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;aa&#39;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>filter<span class="sc">$</span>countryOfOrigin<span class="sc">$</span>iso3 <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;NGA&#39;</span>, <span class="st">&#39;CIV&#39;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co"># See filter object as JSON</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>jsonlite<span class="sc">::</span><span class="fu">toJSON</span>(filters)</span></code></pre></div>
+<p>There are a number of filtering options to retrieve data from
+Genesys. Best explore how filtering works on the actual website <a href="https://www.genesys-pgr.org/a/overview" class="uri">https://www.genesys-pgr.org/a/overview</a> by inspecting the
+HTTP requests sent by your browser to the API server and then
+replicating them here.</p>
+<div id="taxonomy" class="section level3">
+<h3>Taxonomy</h3>
+<p><code>taxonomy$genus</code> filters by a <em>list</em> of genera.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>filters <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">taxonomy =</span> <span class="fu">list</span>(<span class="at">genus =</span> <span class="fu">list</span>(<span class="st">&#39;Hordeum&#39;</span>, <span class="st">&#39;Musa&#39;</span>)))</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>jsonlite<span class="sc">::</span><span class="fu">toJSON</span>(filters)</span></code></pre></div>
+<p><code>taxonomy$species</code> filters by a <em>list</em> of
+species.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>filters <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">taxonomy =</span> <span class="fu">list</span>(<span class="at">genus =</span> <span class="fu">list</span>(<span class="st">&#39;Hordeum&#39;</span>), <span class="at">species =</span> <span class="fu">list</span>(<span class="st">&#39;vulgare&#39;</span>)))</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># Print</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>jsonlite<span class="sc">::</span><span class="fu">toJSON</span>(filters)</span></code></pre></div>
+</div>
+<div id="origin-of-material" class="section level3">
+<h3>Origin of material</h3>
+<p><code>countryOfOrigin$iso3</code> filters by ISO3 code of country of
+origin of PGR material.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Material originating from Germany (DEU) and France (FRA)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>filters <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">countryOfOrigin =</span> <span class="fu">list</span>(<span class="at">iso3 =</span> <span class="fu">list</span>(<span class="st">&#39;DEU&#39;</span>, <span class="st">&#39;FRA&#39;</span>)))</span></code></pre></div>
+<p><code>geo.latitude</code> and <code>geo.longitude</code> filters by
+latitude/longitude (in decimal format) of the collecting site.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>filters <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">geo =</span> <span class="fu">list</span>(<span class="at">latitude =</span> genesysr<span class="sc">::</span><span class="fu">range</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">30</span>), <span class="at">longitude =</span> genesysr<span class="sc">::</span><span class="fu">range</span>(<span class="dv">30</span>, <span class="dv">50</span>)))</span></code></pre></div>
+</div>
+<div id="holding-institute" class="section level3">
+<h3>Holding institute</h3>
+<p><code>institute$code</code> filters by a <em>list</em> of FAO WIEWS
+institute codes of the holding institutes.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Filter for ITC (BEL084) and CIAT (COL003)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">list</span>(<span class="at">institute =</span> <span class="fu">list</span>(<span class="at">code =</span> <span class="fu">list</span>(<span class="st">&#39;BEL084&#39;</span>, <span class="st">&#39;COL003&#39;</span>)))</span></code></pre></div>
+<p><code>institute$country$iso3</code> filters by a <em>list</em> of
+ISO3 country codes of country of the holding institute.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Filter for genebanks in Slovenia (SVN) and Belgium (BEL)</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">list</span>(<span class="at">institute =</span> <span class="fu">list</span>(<span class="at">country =</span> <span class="fu">list</span>(<span class="at">iso3 =</span> <span class="fu">list</span>(<span class="st">&#39;SVN&#39;</span>, <span class="st">&#39;BEL&#39;</span>))))</span></code></pre></div>
+</div>
+</div>
+<div id="selecting-columns" class="section level1">
+<h1>Selecting columns</h1>
+</div>
+<div id="step-by-step-example" class="section level1">
+<h1>Step-by-step example</h1>
+<p>Let’s take a look of all the process of fetching accession passport
+data from Genesys.</p>
+<ol style="list-style-type: decimal">
+<li>Load genesysr</li>
+</ol>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(genesysr)</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Setup using user credentials</li>
+</ol>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">setup_sandbox</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">user_login</span>()</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Fetch basic data</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>musa <span class="ot">&lt;-</span> genesysr<span class="sc">::</span><span class="fu">get_accessions</span>(<span class="fu">list</span>(<span class="at">taxonomy =</span> <span class="fu">list</span>(<span class="at">genus =</span> <span class="fu">list</span>(<span class="st">&#39;Musa&#39;</span>))))</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Download columns of interest</li>
+</ol>
+<pre><code># Fetch only accession number, storage and taxonomic data for *Musa* accessions
+musa &lt;- genesysr::get_accessions(list(taxonomy = list(genus = list(&#39;Musa&#39;))), fields = list(&quot;ACCENUMB&quot;, &quot;STORAGE&quot;, &quot;GENUS&quot;, &quot;SPECIES&quot;, &quot;SUBTAXA&quot;))</code></pre>
+<p>The following column names are available:</p>
+<table>
+<colgroup>
+<col width="28%" />
+<col width="71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>INSTCODE</td>
+<td>FAO WIEWS code of the genebank managing the material</td>
+</tr>
+<tr class="even">
+<td>ACCENUMB</td>
+<td>Accession number</td>
+</tr>
+<tr class="odd">
+<td>DOI</td>
+<td>DOI of the accession</td>
+</tr>
+<tr class="even">
+<td>HISTORIC</td>
+<td>Flag indicating if the accession record is historical
+(<code>true</code>) or active (<code>false</code>)</td>
+</tr>
+<tr class="odd">
+<td>CURATION</td>
+<td>Type of curation applied to this accession</td>
+</tr>
+<tr class="even">
+<td>GENUS</td>
+<td>Genus</td>
+</tr>
+<tr class="odd">
+<td>SPECIES</td>
+<td>Specific epithet</td>
+</tr>
+<tr class="even">
+<td>SPAUTHOR</td>
+<td>Species authority</td>
+</tr>
+<tr class="odd">
+<td>SUBTAXA</td>
+<td>Subtaxon information at the most detailed taxonomic level</td>
+</tr>
+<tr class="even">
+<td>SUBTAUTHOR</td>
+<td>Subtaxon authority</td>
+</tr>
+<tr class="odd">
+<td>GRIN_TAXON_ID</td>
+<td>GRIN Taxonomy ID of the taxon</td>
+</tr>
+<tr class="even">
+<td>GRIN_NAME</td>
+<td>Taxon name according to GRIN Taxonomy</td>
+</tr>
+<tr class="odd">
+<td>GRIN_AUTHOR</td>
+<td>Taxon authority</td>
+</tr>
+<tr class="even">
+<td>CROPNAME</td>
+<td>Crop name(s) as provided by the genebank</td>
+</tr>
+<tr class="odd">
+<td>CROPCODE</td>
+<td>Crop code used by Genesys</td>
+</tr>
+<tr class="even">
+<td>SAMPSTAT</td>
+<td>Biological status of the accession</td>
+</tr>
+<tr class="odd">
+<td>ACQDATE</td>
+<td>Acquisition date</td>
+</tr>
+<tr class="even">
+<td>ACCENAME</td>
+<td>Accession name</td>
+</tr>
+<tr class="odd">
+<td>ORIGCTY</td>
+<td>Country of provenance of the material</td>
+</tr>
+<tr class="even">
+<td>COLLSITE</td>
+<td>Site of collecting</td>
+</tr>
+<tr class="odd">
+<td>DECLATITUDE</td>
+<td>Latitude of the collecting site</td>
+</tr>
+<tr class="even">
+<td>DECLONGITUDE</td>
+<td>Longitude of the collecting site</td>
+</tr>
+<tr class="odd">
+<td>COORDUNCERT</td>
+<td>Coordinate uncertainty in meters</td>
+</tr>
+<tr class="even">
+<td>COORDDATUM</td>
+<td>Coordinate datum</td>
+</tr>
+<tr class="odd">
+<td>GEOREFMETH</td>
+<td>Georeferencing method</td>
+</tr>
+<tr class="even">
+<td>ELEVATION</td>
+<td>Elevation of the collecting site</td>
+</tr>
+<tr class="odd">
+<td>COLLDATE</td>
+<td>Collecting date</td>
+</tr>
+<tr class="even">
+<td>COLLSRC</td>
+<td>Collecting source</td>
+</tr>
+<tr class="odd">
+<td>COLLNUMB</td>
+<td>Collecting number</td>
+</tr>
+<tr class="even">
+<td>COLLCODE</td>
+<td>FAO WIEWS code of the institute that originally collected the
+material</td>
+</tr>
+<tr class="odd">
+<td>COLLNAME</td>
+<td>Name of the institute that collected the material</td>
+</tr>
+<tr class="even">
+<td>COLLINSTADDRESS</td>
+<td>Address of the institute that collected the material</td>
+</tr>
+<tr class="odd">
+<td>COLLMISSID</td>
+<td>Collecting mission name/identifier</td>
+</tr>
+<tr class="even">
+<td>DONORCODE</td>
+<td>FAO WIEWS code of the institute from which this accession was
+acquired</td>
+</tr>
+<tr class="odd">
+<td>DONORNAME</td>
+<td>Name of the institute from which this accession was acquired</td>
+</tr>
+<tr class="even">
+<td>DONORNUMB</td>
+<td>Accession number at the donor institute</td>
+</tr>
+<tr class="odd">
+<td>OTHERNUMB</td>
+<td>Other numbers/identifiers associated with this accession</td>
+</tr>
+<tr class="even">
+<td>BREDCODE</td>
+<td>FAO WIES code of the institute that developed/bred this
+material</td>
+</tr>
+<tr class="odd">
+<td>BREDNAME</td>
+<td>Name of the institute that developed this material</td>
+</tr>
+<tr class="even">
+<td>ANCEST</td>
+<td>Ancestral data or pedigree information</td>
+</tr>
+<tr class="odd">
+<td>DUPLSITE</td>
+<td>FAO WIEWS codes of institutes where this accession is safety
+duplicated by the genebank</td>
+</tr>
+<tr class="even">
+<td>STORAGE</td>
+<td>Types of germplasm storage</td>
+</tr>
+<tr class="odd">
+<td>MLSSTAT</td>
+<td>Status of the accession in the Multilateral System of the
+ITPGRFA</td>
+</tr>
+<tr class="even">
+<td>ACCEURL</td>
+<td>Accession URL</td>
+</tr>
+<tr class="odd">
+<td>REMARKS</td>
+<td>Notes and remarks</td>
+</tr>
+<tr class="even">
+<td>DATAPROVIDERID</td>
+<td>Database ID of this record in genebank’s own database</td>
+</tr>
+<tr class="odd">
+<td>PDCI</td>
+<td>Passport Data Completeness Index for this accession</td>
+</tr>
+<tr class="even">
+<td>UUID</td>
+<td>UUID assigned to this record by Genesys</td>
+</tr>
+<tr class="odd">
+<td>LASTMODIFIED</td>
+<td>Date when this record was last updated in Genesys</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="downloading-all-non-historical-records" class="section level1">
+<h1>Downloading all non-historical records</h1>
+<p>Please use sparingly!</p>
+<pre><code>accessions &lt;- get_accessions(filters = c(historic = list(&#39;false&#39;)))</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
