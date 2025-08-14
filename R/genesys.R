@@ -258,9 +258,9 @@ download_mcpd <- function(instituteCode, file = NULL) {
   ) %>%
     httr2::req_body_form(mcpd = "mcpd");
 
-  con <- req |> httr2::req_perform_connection()
+  con <- req %>% httr2::req_perform_connection()
   while (!httr2::resp_stream_is_complete(con)) {
-    bytes <- con |> httr2::resp_stream_raw(2)
+    bytes <- con %>% httr2::resp_stream_raw(2)
     cat(".")
     writeBin(bytes, outputFile)
   }
@@ -303,9 +303,9 @@ download_pdci <- function(instituteCode, file = NULL) {
   ) %>%
     httr2::req_body_form(pdci = "pdci");
   
-  con <- req |> httr2::req_perform_connection()
+  con <- req %>% httr2::req_perform_connection()
   while (!httr2::resp_stream_is_complete(con)) {
-    bytes <- con |> httr2::resp_stream_raw(2)
+    bytes <- con %>% httr2::resp_stream_raw(2)
     cat(".")
     writeBin(bytes, outputFile)
   }

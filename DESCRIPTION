@@ -12,13 +12,13 @@ Authors@R: c(person(family = "Global Crop Diversity Trust", role = c("cph")),
   person("Matija", "Obreza", email = "matija.obreza@croptrust.org", role = c("aut", "cre")),
   person("Nora", "Castaneda", email = "nora.castaneda@croptrust.org", role = c("ctb")))
 Maintainer: Matija Obreza <matija.obreza@croptrust.org>
-Depends: R (>= 4.1.0)
+Depends: R (>= 3.1.0)
 Imports: httr2 (>= 1.2.1), jsonlite, dplyr, readr, magrittr,
 VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-08-14 08:26:42 UTC; mobreza
+Packaged: 2025-08-14 08:44:28 UTC; mobreza
 Author: Global Crop Diversity Trust [cph],
   Matija Obreza [aut, cre],
   Nora Castaneda [ctb]

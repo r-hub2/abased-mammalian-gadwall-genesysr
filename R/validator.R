@@ -48,9 +48,9 @@ check_taxonomy <- function(mcpd, toCurrentTaxa = FALSE) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  con <- req |> httr2::req_perform_connection()
+  con <- req %>% httr2::req_perform_connection()
   while (!httr2::resp_stream_is_complete(con)) {
-    bytes <- con |> httr2::resp_stream_raw(2)
+    bytes <- con %>% httr2::resp_stream_raw(2)
     cat(".")
     writeBin(bytes, outputFile)
   }
@@ -106,9 +106,9 @@ check_landorsea <- function(mcpd) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  con <- req |> httr2::req_perform_connection()
+  con <- req %>% httr2::req_perform_connection()
   while (!httr2::resp_stream_is_complete(con)) {
-    bytes <- con |> httr2::resp_stream_raw(2)
+    bytes <- con %>% httr2::resp_stream_raw(2)
     cat(".")
     writeBin(bytes, outputFile)
   }
@@ -166,9 +166,9 @@ check_country <- function(mcpd) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  con <- req |> httr2::req_perform_connection()
+  con <- req %>% httr2::req_perform_connection()
   while (!httr2::resp_stream_is_complete(con)) {
-    bytes <- con |> httr2::resp_stream_raw(2)
+    bytes <- con %>% httr2::resp_stream_raw(2)
     cat(".")
     writeBin(bytes, outputFile)
   }
