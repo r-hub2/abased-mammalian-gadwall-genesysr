@@ -1,3 +1,7 @@
+## Version 2.2.0
+
+- Upgrade to Genesys API v2
+
 ## version 2.1.1
 
 - Fixed issue with user_login() with httr2.

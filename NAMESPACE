@@ -3,7 +3,6 @@
 export(SELECT_ALL_FIELDS)
 export(SELECT_GEO_FIELDS)
 export(SELECT_INFO_FIELDS)
-export(api1_url)
 export(api2_url)
 export(authorization)
 export(check_country)

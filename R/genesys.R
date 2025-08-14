@@ -30,7 +30,7 @@
 #' 
 #' @export
 me <- function() {
-  resp <- .api_call(api1_url("/me/profile"))
+  resp <- .api_call(api2_url("/me/profile"))
   message(jsonlite::toJSON(jsonlite::fromJSON(resp), pretty = TRUE))
   invisible(resp)
 }
@@ -47,7 +47,7 @@ me <- function() {
   if (is.null(select)) {
     stop("select is required")
   }
-  resp <- .postForm(path = api1_url("/acn/query"), query = query, accept = "text/csv,*/*", mcpd = "true", filter = jsonlite::toJSON(filters, auto_unbox = TRUE), select = select)
+  resp <- .postForm(path = api2_url("/acn/query"), query = query, accept = "text/csv,*/*", mcpd = "true", filter = jsonlite::toJSON(filters, auto_unbox = TRUE), select = select)
   end_time <- as.numeric(as.numeric(Sys.time())*1000, digits=15)
   
   if (nchar(trimws(resp)) == 0) {
@@ -251,20 +251,20 @@ download_mcpd <- function(instituteCode, file = NULL) {
   }
 
   outputFile <- file(description = file, blocking = T, raw = T, open = "wb")
-  write_bytes <- function(x) {
-    cat(".")
-    writeBin(x, outputFile)
-    TRUE
-  }
 
   req <- .api_request(
     method = "post",
-    path = api1_url(paste0("/wiews/", instituteCode, "/download")),
+    path = api2_url(paste0("/wiews/", instituteCode, "/download")),
   ) %>%
     httr2::req_body_form(mcpd = "mcpd");
 
-  req %>% httr2::req_stream(write_bytes, buffer_kb = 32)
-
+  con <- req |> httr2::req_perform_connection()
+  while (!httr2::resp_stream_is_complete(con)) {
+    bytes <- con |> httr2::resp_stream_raw(2)
+    cat(".")
+    writeBin(bytes, outputFile)
+  }
+  close(con)
   close(outputFile)
   message("Done.")
   invisible(file)
@@ -296,21 +296,20 @@ download_pdci <- function(instituteCode, file = NULL) {
   }
   
   outputFile <- file(description = file, blocking = T, raw = T, open = "wb")
-  write_bytes <- function(x) {
-    cat(".")
-    writeBin(x, outputFile)
-    TRUE
-  }
   
   req <- .api_request(
     method = "post",
-    path = api1_url(paste0("/wiews/", instituteCode, "/download")),
+    path = api2_url(paste0("/wiews/", instituteCode, "/download")),
   ) %>%
     httr2::req_body_form(pdci = "pdci");
   
-  
-  req %>% httr2::req_stream(write_bytes, buffer_kb = 32)
-  
+  con <- req |> httr2::req_perform_connection()
+  while (!httr2::resp_stream_is_complete(con)) {
+    bytes <- con |> httr2::resp_stream_raw(2)
+    cat(".")
+    writeBin(bytes, outputFile)
+  }
+  close(con)  
   close(outputFile)
   message("Done.")
   invisible(file)
@@ -332,7 +331,7 @@ download_pdci <- function(instituteCode, file = NULL) {
 list_crops <- function() {
   
   start_time <- as.numeric(as.numeric(Sys.time())*1000, digits=15)
-  resp <- .api_call(path = api1_url("/crops/list"), query = list(l=1000), accept = "text/csv")
+  resp <- .api_call(path = api2_url("/crops/list"), query = list(l=1000), accept = "text/csv")
   end_time <- as.numeric(as.numeric(Sys.time())*1000, digits=15)
   message(paste("Retrieved crops in", end_time - start_time, "ms."))
   
@@ -364,7 +363,7 @@ list_crops <- function() {
 list_species <- function(filters = list()) {
   
   start_time <- as.numeric(as.numeric(Sys.time())*1000, digits=15)
-  resp <- .post(path = api1_url("/acn/species"), body = filters, accept = "text/csv")
+  resp <- .post(path = api2_url("/acn/species"), body = filters, accept = "text/csv")
   end_time <- as.numeric(as.numeric(Sys.time())*1000, digits=15)
   message(paste("Retrieved taxonomic data in", end_time - start_time, "ms."))
   
@@ -425,7 +424,7 @@ list_species <- function(filters = list()) {
 #' @return List of institutes
 list_institutes <- function(filters = list(), at.least = NULL) {
 
-  path <- api1_url("/wiews/list")
+  path <- api2_url("/wiews/list")
   
   # Fetch first page to determine number of records
   data <- .fetch_csv_page(path, filters, page = 0, size = 100)

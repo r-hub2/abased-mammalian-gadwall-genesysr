@@ -198,21 +198,6 @@ client_login <- function() {
   return(resp)
 }
 
-
-#' Get partial API v1 URL for the provided path
-#'
-#' @param path relative path of the API v1 endpoint (e.g. \code{/me})
-#'
-#' @return Returns "/api/v1" + path
-#' @export
-#'
-#' @examples
-#'  api1_url("/me")
-api1_url <- function(path) {
-  paste0("/api/v1", path)
-}
-
-
 #' Get partial API v2 URL for the provided path
 #'
 #' @param path relative path of the API v2 endpoint (e.g. \code{/me})

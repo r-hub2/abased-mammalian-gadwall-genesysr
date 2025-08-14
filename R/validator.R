@@ -31,11 +31,7 @@ check_taxonomy <- function(mcpd, toCurrentTaxa = FALSE) {
   }
   
   outputFile <- file(description = TMP, blocking = T, raw = T, open = "wb")
-  write_bytes <- function(x) {
-    cat(".")
-    writeBin(x, outputFile)
-    TRUE
-  }
+
   
   req <- httr2::request("https://validator.genesys-pgr.org/process") %>%
     httr2::req_headers(
@@ -52,8 +48,13 @@ check_taxonomy <- function(mcpd, toCurrentTaxa = FALSE) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  req %>% httr2::req_stream(write_bytes, buffer_kb = 32)
-  
+  con <- req |> httr2::req_perform_connection()
+  while (!httr2::resp_stream_is_complete(con)) {
+    bytes <- con |> httr2::resp_stream_raw(2)
+    cat(".")
+    writeBin(bytes, outputFile)
+  }
+  close(con)
   close(outputFile)
   message("Done.")
   R <- readr::read_delim(TMP, delim='\t', quote='"', escape_double=FALSE, escape_backslash=TRUE, show_col_types = FALSE)
@@ -89,12 +90,7 @@ check_landorsea <- function(mcpd) {
   }
   
   outputFile <- file(description = TMP, blocking = T, raw = T, open = "wb")
-  write_bytes <- function(x) {
-    cat(".")
-    writeBin(x, outputFile)
-    TRUE
-  }
-  
+
   req <- httr2::request("https://validator.genesys-pgr.org/process") %>%
     httr2::req_headers(
       Accept = "text/csv",
@@ -110,8 +106,13 @@ check_landorsea <- function(mcpd) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  req %>% httr2::req_stream(write_bytes, buffer_kb = 32)
-  
+  con <- req |> httr2::req_perform_connection()
+  while (!httr2::resp_stream_is_complete(con)) {
+    bytes <- con |> httr2::resp_stream_raw(2)
+    cat(".")
+    writeBin(bytes, outputFile)
+  }
+  close(con)
   close(outputFile)
   message("Done.")
   R <- readr::read_delim(TMP, delim='\t', quote='"', escape_double=FALSE, escape_backslash=TRUE, show_col_types = FALSE)
@@ -149,12 +150,7 @@ check_country <- function(mcpd) {
   }
   
   outputFile <- file(description = TMP, blocking = T, raw = T, open = "wb")
-  write_bytes <- function(x) {
-    cat(".")
-    writeBin(x, outputFile)
-    TRUE
-  }
-  
+
   req <- httr2::request("https://validator.genesys-pgr.org/process") %>%
     httr2::req_headers(
       Accept = "text/csv",
@@ -170,8 +166,13 @@ check_country <- function(mcpd) {
       csvText = readChar(CSV, file.info(CSV)$size)
     );
   
-  req %>% httr2::req_stream(write_bytes, buffer_kb = 32)
-  
+  con <- req |> httr2::req_perform_connection()
+  while (!httr2::resp_stream_is_complete(con)) {
+    bytes <- con |> httr2::resp_stream_raw(2)
+    cat(".")
+    writeBin(bytes, outputFile)
+  }
+  close(con)  
   close(outputFile)
   message("Done.")
 

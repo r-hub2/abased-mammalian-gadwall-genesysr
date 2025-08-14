@@ -11,9 +11,9 @@
 
 \item{query}{query string parameters}
 
-\item{body}{request body (will be serialized to JSON)}
+\item{accept}{Content type to use in Accept header}
 
-\item{content.type}{Content-Type of the body}
+\item{...}{parameters to submit in form body}
 }
 \value{
 httr response
