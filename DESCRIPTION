@@ -18,7 +18,7 @@ VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-08-14 08:44:28 UTC; mobreza
+Packaged: 2025-08-19 06:28:32 UTC; mobreza
 Author: Global Crop Diversity Trust [cph],
   Matija Obreza [aut, cre],
   Nora Castaneda [ctb]

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matija Obreza" />
 
-<meta name="date" content="2025-08-14" />
+<meta name="date" content="2025-08-19" />
 
 <title>Validating passport data</title>
 
@@ -239,7 +239,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Validating passport data</h1>
 <h4 class="author">Matija Obreza</h4>
-<h4 class="date">2025-08-14</h4>
+<h4 class="date">2025-08-19</h4>
 
 
 
@@ -258,7 +258,7 @@ the country of origin.</p>
 <h1>Scientific names spell-check</h1>
 <p>The tool checks data against the GRIN-Global Taxonomy database
 maintained by USDA-ARS, distributed with the GRIN-Global installer. See
-<a href="https://npgsweb.ars-grin.gov/gringlobal/taxon/abouttaxonomy.aspx">GRIN
+<a href="https://npgsweb.ars-grin.gov/gringlobal/taxon/abouttaxonomy">GRIN
 Taxonomy for Plants</a>.</p>
 <p>Only the following MCPD columns will be checked for taxonomic data:
 <code>GENUS</code>, <code>SPECIES</code>, <code>SPAUTHOR</code>,
@@ -395,7 +395,7 @@ coordinate fixes.</p>
 </tbody>
 </table>
 <pre><code>geoCheck &lt;- genesysr::check_country(mcpd)</code></pre>
-<p>The validator returns all incoming columns, but annotates the
+<p>The Validator returns all incoming columns, but annotates the
 taxonomic data with new <code>*_check</code> columns.</p>
 </div>
 

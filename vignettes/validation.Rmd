@@ -21,7 +21,7 @@ and coordinates of the collecting site against the country of origin.
 
 # Scientific names spell-check
 
-The tool checks data against the GRIN-Global Taxonomy database maintained by USDA-ARS, distributed with the GRIN-Global installer. See [GRIN Taxonomy for Plants](https://npgsweb.ars-grin.gov/gringlobal/taxon/abouttaxonomy.aspx). 
+The tool checks data against the GRIN-Global Taxonomy database maintained by USDA-ARS, distributed with the GRIN-Global installer. See [GRIN Taxonomy for Plants](https://npgsweb.ars-grin.gov/gringlobal/taxon/abouttaxonomy). 
 
 Only the following MCPD columns will be checked for taxonomic data: `GENUS`, `SPECIES`, `SPAUTHOR`, `SUBTAXA`, `SUBTAUTHOR`.
 
@@ -61,5 +61,5 @@ Geo tests require `DECLATITUDE`, `DECLONGITUDE` and `ORIGCTY` for country border
 geoCheck <- genesysr::check_country(mcpd)
 ```
 
-The validator returns all incoming columns, but annotates the taxonomic 
+The Validator returns all incoming columns, but annotates the taxonomic 
 data with new `*_check` columns.
